@@ -23,7 +23,7 @@ public:
 
         int target = len - n, ctr = 1;
         ListNode* mover = head;
-        while(mover && ctr < target){
+        while(mover && ctr != target){
             ctr++;
             mover = mover->next;
         }
@@ -36,7 +36,8 @@ public:
             ptr = mover->next;
             mover->next = ptr->next;
         }
-            delete ptr;
+        
+        delete ptr;
 
         return head;
     }
