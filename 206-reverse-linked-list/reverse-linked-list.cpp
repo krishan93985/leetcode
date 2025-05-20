@@ -13,16 +13,19 @@ public:
     ListNode* reverseList(ListNode* head) {
         if(!head || !head->next) return head;
 
-        ListNode *mover = head, *prev = nullptr, *next = head->next;
-        while(mover){
-            next = mover->next;
-            mover->next = prev;
-            prev = mover;
-            if(next) head = next;
+        return reverseLL(head, nullptr);
+    }
 
-            mover = next;
+    ListNode* reverseLL(ListNode* head, ListNode* prev){
+        if(!head->next){
+            head->next = prev;
+            return head;
         }
 
-        return head;
+        ListNode* newHead = reverseLL(head->next, head);
+        
+        head->next = prev;
+
+        return newHead;
     }
 };
