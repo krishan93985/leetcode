@@ -17,7 +17,6 @@ var mergeTwoLists = function(list1, list2) {
     if(!mover1 || !mover2) return mover1 || mover2;
 
     while(mover1 && mover2){
-        console.log(mover)
         if(mover1.val < mover2.val){
             mover.next = mover1;
             mover1 = mover1.next;
