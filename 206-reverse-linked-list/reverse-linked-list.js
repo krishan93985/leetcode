@@ -12,16 +12,16 @@
 var reverseList = function(head) {
     if(!head || !head.next) return head;
 
-    let prev = null, next = head.next;
-
-    while(next){
-        head.next = prev;
-        prev = head;
-        head = next;
-        next = next.next;
-    }
-
-    head.next = prev;
+    head = reverseListHelper(head,null);
 
     return head;
+};
+
+var reverseListHelper = function(head, prev) {
+    if(!head) return prev;
+
+    let newHead = reverseListHelper(head.next, head);
+
+    head.next = prev;
+    return newHead;
 };
