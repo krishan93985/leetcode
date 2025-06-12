@@ -11,32 +11,32 @@
  * @return {ListNode}
  */
 var rotateRight = function(head, k) {
-    let size = 0, temp = head;
+    if(!head || !head.next) return head;
 
+    let len = 0, temp = head;
     while(temp){
-        size++;
-        temp=temp.next;
+        len++;
+        temp = temp.next;
     }
 
-    k%=size;
-    if(!head || k==0) return head;
+    k=k%len;
+    if(k == 0) return head;
 
-    let n = size-k+1, count = 1, prev = null, mover = head;
-    while(count != n){
+    let n = len - k + 1, count = 1, prev = null, mover = head;
+    while(count < n){
         prev = mover;
         mover = mover.next;
         count++;
     }
 
     prev.next = null;
-    let tempHead = mover;
-
-    while(mover && mover.next){
+    let newHead = mover;
+    while(mover.next){
         mover = mover.next;
     }
 
     mover.next = head;
-    head = tempHead;
+    head = newHead;
 
     return head;
 };
