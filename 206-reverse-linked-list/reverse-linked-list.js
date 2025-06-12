@@ -9,19 +9,20 @@
  * @param {ListNode} head
  * @return {ListNode}
  */
-var reverseList = function(head) {
-    if(!head || !head.next) return head;
-
-    head = reverseListHelper(head,null);
-
-    return head;
-};
-
-var reverseListHelper = function(head, prev) {
+var reverseList = function(head, prev = null) {
     if(!head) return prev;
 
-    let newHead = reverseListHelper(head.next, head);
+    let newHead = reverseList(head.next, head);
 
     head.next = prev;
     return newHead;
 };
+
+// var reverseListHelper = function(head, prev) {
+//     if(!head) return prev;
+
+//     let newHead = reverseListHelper(head.next, head);
+
+//     head.next = prev;
+//     return newHead;
+// };
