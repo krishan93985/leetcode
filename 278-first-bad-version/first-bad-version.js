@@ -32,6 +32,6 @@ var solution = function(isBadVersion) {
             }
         }
 
-        return right;
+        return left;
     };
 };
