@@ -13,36 +13,15 @@
  * @return {TreeNode}
  */
 var lowestCommonAncestor = function(root, p, q) {
-    let result = {
-        lca: null
-    }
+    if(!root) return null;
     
-    const ans = lca(root, p.val, q.val, result)
+    let left = lowestCommonAncestor(root.left, p, q);
+    let right = lowestCommonAncestor(root.right, p, q);
 
-    // console.log(ans.pExists, ans.qExists, result.lca)
+    left = left ? left : (root == p || root == q) ? root : null;
+    right = right ? right : (root == p || root == q) ? root : null;
 
-    return result.lca;
+    const lca = (left && right) ? root : (left || right);
+
+    return lca;
 };
-
-const lca = (root, p, q, result) => {
-    if(!root) return {pExists:false, qExists:false};
-
-    const left = lca(root.left, p, q, result);
-    const right = lca(root.right, p, q, result);
-    const pExists = (left.pExists || right.pExists);
-    const qExists = (left.qExists || right.qExists);
-
-    const finalPExists = pExists || root.val === p;
-    const finalQExists = qExists || root.val === q;
-    // console.log({finalPExists, finalQExists, val: root.val, p, q})
-
-    if(finalPExists && finalQExists)
-        result.lca = result.lca ? result.lca : root;
-
-    // console.log({lca:result.lca})
-
-    return {
-        pExists:finalPExists,
-        qExists:finalQExists,
-    }
-}
