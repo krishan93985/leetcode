@@ -18,7 +18,6 @@ var isValidBST = function(root, rangeMin = Number.MIN_SAFE_INTEGER, rangeMax = N
     const right = isValidBST(root.right, val, rangeMax);
 
     const nodeValid = val > rangeMin && val < rangeMax;
-    console.log({nodeValid})
     
     return left && right && nodeValid;
 };
