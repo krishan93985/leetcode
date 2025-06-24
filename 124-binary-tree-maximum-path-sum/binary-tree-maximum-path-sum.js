@@ -26,14 +26,6 @@ var maxPathSum = function(root) {
         let currRightSum = rightSum + root.val;
         max = Math.max(currSum, currLeftSum, currRightSum, max, root.val);
 
-        console.log({
-            leftSum,
-            rightSum,
-            currLeftSum,
-            currRightSum,
-            max
-        })
-
         return Math.max(currLeftSum, currRightSum, root.val)
     }
 
