@@ -3,22 +3,17 @@
  * @return {number}
  */
 var longestConsecutive = function(nums) {
-    const map = new Map()
-
-    for(let num of nums){
-        map.set(num, true)
-    }
+    //converting this to set to avoid nested loop for same minimum values of a consecutive sequence again and again to avoid n^square solution
+    const set = new Set(nums)
 
     let maxCount = 0;
-    for(num of nums){
-        if(!map.has(num-1)){
+    for(num of set){
+        if(!set.has(num-1)){
             let currNum = num, count = 0;
-            if(map.get(currNum) === -1) continue;
-            while(map.has(currNum)){
+            while(set.has(currNum)){
                 count++;
                 currNum++;
             }
-            map.set(num, -1);
             maxCount = maxCount > count ? maxCount:count;
         }
     }
