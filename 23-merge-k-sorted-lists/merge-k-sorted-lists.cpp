@@ -11,12 +11,12 @@
 class Solution {
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        priority_queue<int, vector<int>, greater<int>> pq;
+        priority_queue<pair<int,ListNode*>, vector<pair<int,ListNode*>>, greater<pair<int,ListNode*>>> pq;
 
         for(int i=0; i<lists.size(); i++){
             ListNode* mover = lists[i];
             while(mover){
-                pq.push(mover->val);
+                pq.push(make_pair(mover->val,mover));
                 mover = mover->next;
             }
         }
@@ -25,10 +25,11 @@ public:
         ListNode* mover = head;
 
         while(!pq.empty()){
-            mover->next = new ListNode(pq.top());
+            mover->next = pq.top().second;
             pq.pop();
 
             mover = mover->next;
+            if(mover) mover->next = nullptr;
         }
 
         return head->next;
