@@ -29,7 +29,6 @@ public:
             pq.pop();
 
             mover = mover->next;
-            if(mover) mover->next = nullptr;
         }
 
         return head->next;
