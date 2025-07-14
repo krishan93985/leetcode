@@ -10,7 +10,7 @@ var subsets = function(nums) {
 
 var generateSubsets = function(nums, idx, curr, output){
     if(idx >= nums.length){
-        console.log(curr)
+        // console.log(curr)
         output.push([...curr]);
         return;
     }
