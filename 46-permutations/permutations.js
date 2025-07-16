@@ -3,24 +3,17 @@
  * @return {number[][]}
  */
 var permute = function(nums) {
-    const output = [], permutation = new Set();
+    if(nums.length === 0) return [[]];
 
-    getPermutations(nums, output, permutation);
+    const permutations = permute(nums.slice(1, nums.length));
+    const output = [];
+    for(let perms of permutations){
+        for(let i=0; i<=perms.length; i++){
+            const permCopy = [...perms];
+            permCopy.splice(i,0,nums[0])
+            output.push(permCopy);            
+        }
+    }
 
     return output;
 };
-
-var getPermutations = function(nums, output, permutation){
-    if(permutation.size === nums.length){
-        output.push(Array.from(permutation));
-        return;
-    }
-
-    for(let i=0; i<nums.length; i++){
-        if(permutation.has(nums[i])) continue;
-
-        permutation.add(nums[i]);
-        getPermutations(nums, output, permutation);
-        permutation.delete(nums[i]);
-    }
-}
