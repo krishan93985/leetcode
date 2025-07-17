@@ -4,6 +4,7 @@
  */
 var solveNQueens = function(n) {
     const output = [], board = []
+    const lDig = new Set(), rDig = new Set(), colSet = new Set();
 
     for(let i=0; i<n; i++){
         board.push([])
@@ -19,9 +20,15 @@ var solveNQueens = function(n) {
         }
 
         for(let j=0; j<n; j++){
-            if(boxValid(i,j,n,board)){
+            if(!colSet.has(j) && !lDig.has(i-j) && !rDig.has(i+j)){
+                colSet.add(j);
+                lDig.add(i-j);
+                rDig.add(i+j);
                 board[i][j] = 'Q';
                 placeNQueens(i+1);
+                colSet.delete(j);
+                lDig.delete(i-j);
+                rDig.delete(i+j);
                 board[i][j] = '.';
             }
         }        
@@ -31,24 +38,3 @@ var solveNQueens = function(n) {
 
     return output;
 };
-
-var boxValid = function(i, j, n, board) {
-    //validate column
-    for(let k=0; k<n; k++)
-        if(board[k][j] === 'Q') return false;
-
-    //left diagonal
-    let k=i, l=j;
-    while(k >= 0 && l >=0 && k<n && l<n){
-        if(board[k][l] === 'Q') return false;
-        k--; l--;
-    }
-
-    k=i, l=j;
-    while(k >=0 && l>=0 && k<n && l<n){
-        if(board[k][l] === 'Q') return false;
-        k--; l++;
-    }  
-
-    return true;
-}
