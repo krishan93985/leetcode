@@ -12,38 +12,29 @@
  * @return {ListNode}
  */
 var reverseBetween = function(head, left, right) {
-    if(!head || !head.next) return head;
+    if(!head || !head.next || left === right) return head;
 
-    let tail = null, mid = head;
-    let count = 1;
-    while(count < left){
-        tail=mid;
-        mid=mid.next;
-        count++;
+    let ctr = 1, mover = head, midHead = null, midTail = null;
+    let dummy = prev = new ListNode(0, head);
+
+    while(ctr < left){
+        prev = mover;
+        mover = mover.next;
+        ctr++;
+    }
+    
+    midHead = mover;
+    let next, prevMover = prev;
+    while(ctr <= right){
+        ctr++;
+        next = mover.next;
+        mover.next = prevMover;
+        prevMover = mover;
+        mover = next;
     }
 
-    let midTail = tail, last = mid;
-    while(count <= right){
-        midTail=last;
-        last=last.next;
-        count++;
-    }
+    prev.next = prevMover;
+    midHead.next = next;
 
-    midTail.next = null;
-    let newMid = reverseLL(mid);
-
-    if(tail) tail.next = newMid;
-    else head = newMid;
-    mid.next = last;
-
-    return head;
+    return dummy.next;
 };
-
-const reverseLL = (head, prev=null) => {
-    if(!head) return prev;
-
-    let newHead = reverseLL(head.next, head);
-    head.next = prev;
-
-    return newHead;
-}
