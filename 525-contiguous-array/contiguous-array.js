@@ -4,26 +4,22 @@
  */
 var findMaxLength = function(nums) {
     const map = new Map();
-    let maxLen = 0, i = 0, oneSum = 0, zSum = 0;
-    map.set(0,-1);
 
-    while(i < nums.length){
-        if(nums[i] === 0){
-            zSum++;
-        } else if(nums[i] === 1){
-            oneSum++;
+    let z = 0, o = 0, max = 0;
+    map.set(0, -1);
+
+    for(let i=0; i<nums.length; i++){
+        if(nums[i] === 0) z++;
+        else if(nums[i] === 1) o++;
+
+        let diff = o-z;
+        if(map.has(diff)){
+            let leftIdx = map.get(diff);
+            max = Math.max(i-leftIdx, max)
+        } else{
+            map.set(diff, i);
         }
-
-        const lookupSum = oneSum - zSum;
-        if(map.has(lookupSum)){
-            const currLen = i - map.get(lookupSum);
-            maxLen = maxLen > currLen ? maxLen : currLen;
-        } else {
-            map.set(lookupSum, i);
-        }
-
-        i++;
     }
 
-    return maxLen;
+    return max;
 };
