@@ -3,21 +3,20 @@
  * @return {number}
  */
 var eraseOverlapIntervals = function(intervals) {
-    let sum = 0, currInterval;
-    intervals.sort((a,b) => a[0] - b[0])
+    let sum = 0, end;
 
-    if(intervals.length)
-        currInterval = intervals[0]
+    intervals.sort((a,b) => a[0]-b[0]);
+
+    if(intervals.length) end = intervals[0][1];
 
     for(let i=1; i<intervals.length; i++){
-        let interval = intervals[i]
+        const [cS, cE] = intervals[i];
 
-        let [pS, pE] = currInterval, [nS, nE] = interval;
-        if(pE > nS){
-            sum++
-            currInterval = pE > nE ? interval : currInterval;
+        if(end > cS){
+            sum++;
+            end = end > cE ? cE : end;
         } else{
-            currInterval = interval;
+            end = cE;
         }
     }
 
