@@ -5,40 +5,35 @@
  */
 var search = function(nums, target) {
     let pivot = -1;
-    let start = 0, end = nums.length -1;
-    let mid, pos = -1;
-    while(start < end){
-        mid = Math.floor((start+end)/2);
-        let el = nums[mid];
+    let s = 0, e = nums.length-1;
+    let mid;
 
-        if(el > nums[end])
-            start = mid+1;
-        else if(el <= nums[end]){
-            end = mid;
-        }
+    while(s < e){
+        mid = Math.floor((s+e)/2);
+        let lvalue = nums[mid], rvalue = nums[e];
+        if(lvalue > rvalue) s=mid+1;
+        else e=mid;
     }
 
-    pivot = start;
-    // console.log({pivot})
+    pivot = s;
 
-    pos = binSearch(nums,0, pivot-1, Math.floor((pivot-1)/2), target);
-    // console.log({pos})
+    let pos = binSearch(nums, 0, pivot-1, target);
     if(pos !== -1) return pos;
 
-    pos = binSearch(nums,pivot, nums.length - 1, Math.floor((pivot+nums.length-1)/2), target);
-    // console.log({pos})
+    pos  = binSearch(nums, pivot, nums.length-1, target)
 
     return pos;
 };
 
-var binSearch = function(nums, s, e, mid, target){
-    if(s > e) return -1;
+var binSearch = function(nums, s, e, target) {
+    if(s>e) return -1;
 
-    if(nums[mid] === target) return mid;
-    if(nums[mid] > target)
-        return binSearch(nums, s, mid-1, Math.floor((s+e)/2), target);
-    else
-        return binSearch(nums, mid+1, e, Math.floor((s+e)/2), target);
+    let mid = Math.floor((s+e)/2)
+    let midVal = nums[mid];
+    if(midVal === target) return mid;
 
-    return -1;
+    if(midVal > target)
+        return binSearch(nums, s, mid-1, target)
+    
+    return binSearch(nums, mid+1, e, target)
 }
