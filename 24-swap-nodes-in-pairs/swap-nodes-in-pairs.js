@@ -10,13 +10,20 @@
  * @return {ListNode}
  */
 var swapPairs = function(head) {
-    if(!head || !head.next) return head;
+   if(!head || !head.next) return head;
 
-    let tailHead = swapPairs(head.next.next);
+   let dummy = new ListNode(0, head);
+   let prev = dummy, mover = head;
+   let next;
 
-    let newHead = head.next;
-    head.next = tailHead;
-    newHead.next = head; 
+   while(mover && mover.next){
+    next = mover.next.next;
+    mover.next.next = mover;
+    prev.next = mover.next;
+    mover.next = next;
+    prev = mover;
+    mover = mover.next;
+   }
 
-    return newHead;   
+   return dummy.next;
 };
