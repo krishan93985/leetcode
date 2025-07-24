@@ -3,31 +3,23 @@
  * @return {boolean}
  */
 var isValid = function(s) {
-    const stack = [];
-
-    const opening = ["(","{","["];
-    const closing = [")","}","]"];
-    const openingBracketMap = new Map([
-        ['(',')'],
-        ['{','}'],
-        ['[',']'],
-    ])
-
-    const closingBracketMap = new Map([
+    const map = new Map([
         [')','('],
         ['}','{'],
         [']','['],
     ])
 
+    const stack = [];
+
     for(let char of s){
-        if(openingBracketMap.get(char)){
+        if(map.has(char)){
+            let top = stack[stack.length-1];
+            if(!top || top !== map.get(char)) return false;
+
+            stack.pop();
+        } else {
             stack.push(char);
-        } else if(closingBracketMap.get(char)){
-            const top = stack.at(stack.length - 1);
-            if(top !== closingBracketMap.get(char)) return false;
-            stack.pop();    
-        } else
-            return false;
+        }
     }
 
     return stack.length === 0;
