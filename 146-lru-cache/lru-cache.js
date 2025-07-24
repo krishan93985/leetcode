@@ -1,41 +1,39 @@
-var DLLNode = function(key, value, prev, next){
-    this.key = key ?? 0;
-    this.value = value ?? 0;
-    this.prev = prev ?? null;
-    this.next = next ?? null;
+var DLLNode = function(key = -1, data = 0, prev = null, next = null){
+    this.data = data;
+    this.prev = prev;
+    this.next = next;
+    this.key = key;
 }
 
-var DLL = function(){
-    this.head = new DLLNode(-1, -1);
-    this.tail = new DLLNode(-1, -1, this.head, null);
-    this.head.next = this.tail;
-}
+class DLL{
+    constructor(){
+        this.head = new DLLNode()
+        this.tail = new DLLNode()
 
-DLL.prototype.moveToStart = function(node){
-    if(node.prev) node.prev.next = node.next;
-    if(node.next) node.next.prev = node.prev;
+        this.head.next = this.tail;
+        this.tail.prev = this.head;
+    }
 
-    let temp = this.head.next;
-    this.head.next = node;
-    node.prev = this.head;
-    node.next = temp;
-    temp.prev = node;
-}
+    deleteNode(node){
+        node.next.prev = node.prev;
+        node.prev.next = node.next;
+    }
 
-DLL.prototype.deleteNode = function(node){
-    if(node.prev) node.prev.next = node.next;
-    if(node.next) node.next.prev = node.prev;
-
-    return node;
+    pushBack(node){
+        this.tail.prev.next = node;
+        node.prev = this.tail.prev;
+        this.tail.prev = node;
+        node.next = this.tail;
+    }
 }
 
 /**
  * @param {number} capacity
  */
 var LRUCache = function(capacity) {
-    this.cache = new DLL();
+    this.list = new DLL(capacity);
     this.map = new Map();
-    this.capacity = capacity ?? 0;
+    this.capacity = capacity;
 };
 
 /** 
@@ -43,28 +41,18 @@ var LRUCache = function(capacity) {
  * @return {number}
  */
 LRUCache.prototype.get = function(key) {
-    /*if key exists
-        - get the key
-        - move the key to start of the list
+   //if key present in map (delete the node and push it to back)
+//    console.log('get', key,this.map.get(key))
+   if(this.map.has(key)){
+    let node = this.map.get(key);
+    this.list.deleteNode(node);
 
-    else return -1
-    */
+    this.list.pushBack(node);
 
-    if(this.map.has(key)){
-        let valNode = this.map.get(key);
-        // console.log(valNode.key, valNode.value)
-        let result = valNode.value;
+    return node.data;
+   }
 
-        this.cache.moveToStart(valNode);
-
-            // console.log("get",key)
-            // console.log(this.cache.head, this.cache.tail)
-        return result;
-    }
-
-    // console.log("get",key)
-    // console.log(this.cache.head, this.cache.tail)
-    return -1
+   return -1;
 };
 
 /** 
@@ -73,51 +61,22 @@ LRUCache.prototype.get = function(key) {
  * @return {void}
  */
 LRUCache.prototype.put = function(key, value) {
-    /*if key exists
-        - update the key
-        - move the key to start of the list
-    else 
-        - remove the last node
-        - add the new node to start
-    */
-
-    if(this.map.has(key)){
-        let valNode = this.map.get(key);
-        valNode.value = value;
-
-        this.cache.moveToStart(valNode);
-
-    //     console.log("put",key,value)
-    // console.log(this.cache.head, this.cache.tail)
-
-        return null;
-    } 
-
-    let head = this.cache.head, tail = this.cache.tail;
-
-    if(this.map.size >= this.capacity){
-        // console.log({ key, value, mapSizeBefore:this.map.size});
-        let lastNode = tail.prev;
-        // console.log(head, tail)
-        let deletedKey = lastNode.key;
-        this.cache.deleteNode(lastNode);
-
-        this.map.delete(deletedKey);
-        // console.log({ key, value, mapSizeAfter:this.map.size, deletedKey: lastNode.key});
+   //if already in map, delete it, and push to  back with updated value
+   //else push to back with updated value
+   
+   if(this.get(key) !== -1){
+    let node = this.map.get(key);
+    node.data = value;
+   } else{
+        let node = new DLLNode(key, value);
+        if(this.map.size === this.capacity){
+            this.map.delete(this.list.head.next.key);
+            this.list.deleteNode(this.list.head.next)
+        }
+        
+        this.list.pushBack(node);
+        this.map.set(key, node);
     }
-
-    let newNode = new DLLNode(key,value);
-    let temp = head.next;
-    head.next = newNode;
-    newNode.prev = head;
-    newNode.next = temp;
-    temp.prev = newNode;
-    this.map.set(key, newNode);
-
-    // console.log("put",key,value)
-    // console.log(head, tail)
-
-    // console.log(head.next.key, head.next.value, this.map.get(key))
 };
 
 /** 
