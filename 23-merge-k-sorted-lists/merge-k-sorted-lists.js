@@ -10,23 +10,23 @@
  * @return {ListNode}
  */
 var mergeKLists = function(lists) {
-    let head = new ListNode();
-    let mover = head;
+   let dummy = new ListNode();
+   let mover = dummy;
+
     while(true){
-        let minIndex = -1, minVal = Number.MAX_SAFE_INTEGER;
-        for(let [key, list] of lists.entries()){
-            if(list && list.val < minVal) {
-                minVal = list.val;
-                minIndex = key;
+        let minIndex = -1;
+        for(let i=0; i<lists.length ; i++){
+            if(lists[i] && (minIndex == -1 || (lists[i].val < lists[minIndex].val))){
+                minIndex = i;
             }
         }
 
-        if(minIndex === -1) break;
+        if(minIndex == -1) break;
 
-        mover.next = new ListNode(minVal);
+        mover.next = lists[minIndex];
         mover = mover.next;
         lists[minIndex] = lists[minIndex].next;
     }
 
-    return head.next;
+    return dummy.next;
 };
