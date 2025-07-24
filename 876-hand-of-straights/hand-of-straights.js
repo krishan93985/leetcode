@@ -4,22 +4,24 @@
  * @return {boolean}
  */
 var isNStraightHand = function(hand, groupSize) {
-    let map = new Map()
+    const map = new Map()
 
-    for(let num of hand){
-        map.set(num,(map.get(num) || 0) + 1);
+    for(let h of hand){
+        map.set(h, (map.get(h) || 0) + 1)
     }
 
     hand.sort((a,b) => a-b);
 
-    for(let [key, value] of hand.entries()){
-        if(map.get(value)){
-            for(let i=value; i < value+groupSize; i++){
-                let count = map.get(i) || 0;
-                if(!count) return false;
+    for(let i=0; i<hand.length; i++){
+        let size = groupSize, counter = hand[i];
+        if(!map.get(counter)) continue;
 
-                map.set(i, count-1);
-            }
+        while(size){
+            if(!map.get(counter)) return false;
+
+            map.set(counter, map.get(counter) - 1);
+            counter++;
+            size--;
         }
     }
 
