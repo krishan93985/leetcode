@@ -4,29 +4,22 @@
  * @return {number}
  */
 var numberOfSubarrays = function(nums, k) {
-    const pfxSum = [0];
-    const result = 0;
+    const map = new Map()
+    map.set(0,1)
 
-    nums.map((num,i) => {
-        const res = num%2 === 0 ? 0 : 1;
-        pfxSum.push(pfxSum[i] + res);
-    })
-
-    const map = new Map();
-    let sum = 0;
-    map.set(0,1);
-
+    let odd = 0, count = 0;
     for(let i=0; i<nums.length; i++){
-        const currPSum = pfxSum[i+1];
-        const key = currPSum - k;
+        if(nums[i]%2) odd++;
 
-        if(key >= 0){
-            const freq = map.get(key) ?? 0;
-            sum+=freq;
+        let lookup = odd - k;
+        if(lookup >= 0){
+            let freq = map.get(lookup) || 0;
+
+            count += freq;
         }
 
-        map.set(currPSum, (map.get(currPSum) ?? 0) + 1);
+        map.set(odd, (map.get(odd) || 0) + 1);
     }
 
-    return sum;
+    return count;
 };
