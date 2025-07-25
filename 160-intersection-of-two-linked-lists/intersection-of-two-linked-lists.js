@@ -12,14 +12,14 @@
  * @return {ListNode}
  */
 var getIntersectionNode = function(headA, headB) {
-    if(!headA || !headB) return null;
+    let moverA = headA, moverB = headB;
 
-    let mover1 = headA, mover2 = headB;
-    while(mover1 != mover2){
-        if(!mover1.next && !mover2.next) return null;
-        mover1 = mover1.next ?? headB;
-        mover2 = mover2.next ?? headA;
+    while(moverA || moverB){
+        if(moverA === moverB) return moverA;
+
+       moverA = moverA ? moverA.next : headB;
+       moverB = moverB ? moverB.next : headA;
     }
 
-    return mover1;
+    return null;
 };
