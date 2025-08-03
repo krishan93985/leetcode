@@ -4,24 +4,23 @@
  * @return {number}
  */
 var canCompleteCircuit = function(gas, cost) {
-    const diff = []
-    let extraGas = 0;
-    for(let [key,value] of gas.entries()){
-        diff.push(value-cost[key]);
-        extraGas += value-cost[key]
+    let pos = -1;
+    let gasDiff = 0;
+    for(let i=0; i<gas.length; i++){
+        gasDiff += gas[i] - cost[i]
     }
-    if(extraGas < 0) return -1;
 
-    let index = -1, tank = 0;
-    for(let [key,value] of diff.entries()){
-        tank+=value;
+    if(gasDiff < 0) return pos;
 
-        if(index == -1 && tank >= 0) index = key;
-        else if(tank < 0) {
+    let tank = 0;
+    for(i=0; i<gas.length; i++){
+        tank += gas[i] - cost[i]
+        if(pos === -1 && tank >= 0) pos = i;
+        else if(tank < 0){
+            pos = -1;
             tank=0;
-            index = -1;
         }
     }
 
-    return index;
+    return pos;
 };
