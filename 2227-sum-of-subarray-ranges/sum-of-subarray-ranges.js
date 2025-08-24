@@ -3,56 +3,50 @@
  * @return {number}
  */
 var subArrayRanges = function(nums) {
-    let nse = [], pse = [], pge = [], nge = []
-    const nseSt = [], pseSt = [], ngeSt = [], pgeSt = []
-    for(let [key,value] of nums.entries()){
-        let top = pseSt[pseSt.length-1]          
-        while(pseSt.length && nums[top] > value){
-            pseSt.pop()
-            top = pseSt[pseSt.length-1]
-        }
-        
-        pse[key] = top ?? -1
-        pseSt.push(key)
+    let nge = [], ngeS = [];
+    let nse = [], nseS = [];
+    let pge = [], pgeS = [];
+    let pse = [], pseS = [];
 
-        top = pgeSt[pgeSt.length - 1]
-        while(pgeSt.length && nums[top] < value){
-            pgeSt.pop()
-            top = pgeSt[pgeSt.length-1]
+    for(let i=nums.length-1; i>=0; i--){
+        while(nseS.length && nums[nseS[nseS.length - 1]] >= nums[i]){
+            nseS.pop();
         }
-        
-        pge[key] = top ?? -1
-        pgeSt.push(key)
+
+        nse[i] = nseS.length ? nseS[nseS.length-1] : nums.length;
+        nseS.push(i)
+
+        while(ngeS.length && nums[ngeS[ngeS.length - 1]] <= nums[i]){
+            ngeS.pop();
+        }
+
+        nge[i] = ngeS.length ? ngeS[ngeS.length-1] : nums.length;
+        ngeS.push(i)
     }
 
-    for(let key=nums.length-1; key >= 0; key--){
-        let top = nseSt[nseSt.length-1], value = nums[key]      
-        while(nseSt.length && nums[top] >= value){
-            nseSt.pop()
-            top = nseSt[nseSt.length-1]
-        }
-        
-        nse[key] = top ?? nums.length
-        nseSt.push(key)
 
-        top = ngeSt[ngeSt.length - 1]
-        while(ngeSt.length && nums[top] <= value){
-            ngeSt.pop()
-            top = ngeSt[ngeSt.length-1]
+    for(let i=0; i<nums.length; i++){
+        while(pseS.length && nums[pseS[pseS.length - 1]] > nums[i]){
+            pseS.pop();
         }
-        
-        nge[key] = top ?? nums.length
-        ngeSt.push(key)
+
+        pse[i] = pseS.length ? pseS[pseS.length-1] : -1;
+        pseS.push(i)
+
+        while(pgeS.length && nums[pgeS[pgeS.length - 1]] < nums[i]){
+            pgeS.pop();
+        }
+
+        pge[i] = pgeS.length ? pgeS[pgeS.length-1] : -1;
+        pgeS.push(i)
     }
 
-    let sumMin = 0, sumMax = 0;
-    for(let i=0; i<nums.length;i++){
-        let minSubarraysSum = (nse[i] - i) * (i - pse[i]) * nums[i];
-        sumMin += minSubarraysSum;
+    let minLen = 0, maxLen = 0;
+    for(let i=0; i<nums.length; i++){
+        minLen += (nse[i] - i) * (i-pse[i]) * nums[i];
 
-        let maxSubarraysSum = (nge[i] - i) * (i - pge[i]) * nums[i]
-        sumMax += maxSubarraysSum;
+        maxLen +=(nge[i] - i) * (i-pge[i]) * nums[i];
     }
 
-    return sumMax - sumMin;
+    return maxLen - minLen;
 };
