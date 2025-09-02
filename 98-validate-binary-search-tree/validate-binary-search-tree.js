@@ -10,14 +10,26 @@
  * @param {TreeNode} root
  * @return {boolean}
  */
-var isValidBST = function(root, rangeMin = Number.MIN_SAFE_INTEGER, rangeMax = Number.MAX_SAFE_INTEGER) {
-    if(!root) return true;
-    const val = root.val;
+var isValidBST = function(root) {
+    let isValid = true;
 
-    const left = isValidBST(root.left, rangeMin, val);
-    const right = isValidBST(root.right, val, rangeMax);
+    let helper = (node) => {
+        if(!node){
+            return { min:Number.MAX_SAFE_INTEGER, max:Number.MIN_SAFE_INTEGER }
+        }
 
-    const nodeValid = val > rangeMin && val < rangeMax;
-    
-    return left && right && nodeValid;
+        let left = helper(node.left)
+        let right = helper(node.right)
+
+        if(left.max >= node.val || right.min <= node.val) isValid = false;
+
+        return {
+            min:left.min === Number.MAX_SAFE_INTEGER ? node.val : left.min,
+            max:right.max=== Number.MIN_SAFE_INTEGER ? node.val : right.max,
+        }
+    }
+
+    helper(root)
+
+    return isValid;
 };
