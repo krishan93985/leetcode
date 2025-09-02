@@ -9,8 +9,10 @@ var StockSpanner = function() {
  */
 StockSpanner.prototype.next = function(price) {
     let span = 1;
+
     while(this.stack.length && this.stack[this.stack.length-1].price <= price){
-        span+=this.stack.pop().span;
+        let top = this.stack.pop();
+        span += top.span;
     }
 
     this.stack.push({
