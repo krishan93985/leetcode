@@ -3,22 +3,24 @@
  * @return {number}
  */
 var trap = function(height) {
-    const maxLeft = [], maxRight = []
+    let leftMax = [], rightMax = [];
+    let leftMaxVal = 0, rightMaxVal = 0;
 
-    maxLeft[0] = 0
-    for(let i=1; i<height.length; i++){
-        maxLeft.push(Math.max(maxLeft[maxLeft.length - 1], height[i-1]))
+    for(let i=0; i<height.length; i++){
+        leftMax[i] = height[i] >= leftMaxVal ? 0 : leftMaxVal;
+        leftMaxVal = Math.max(leftMaxVal, height[i]);
     }
 
-    maxRight[height.length-1] = 0
-    for(let i=height.length-2; i>=0; i--){
-        maxRight[i] = Math.max(maxRight[i+1],height[i+1])
+
+    for(let i=height.length-1; i>=0; i--){
+        rightMax[i] = height[i] >= rightMaxVal ? 0 : rightMaxVal;
+        rightMaxVal = Math.max(rightMaxVal, height[i]);
     }
 
     let water = 0;
-    for(let [key, h] of height.entries()){
-        let currWater = Math.min(maxLeft[key], maxRight[key]) - h
-        water += currWater > 0 ? currWater : 0
+    for(let i=0; i<height.length; i++){
+        let currWater = Math.min(leftMax[i], rightMax[i]);
+        if(currWater) water += currWater - height[i];
     }
 
     return water;
