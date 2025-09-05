@@ -6,29 +6,36 @@
 var removeKdigits = function(num, k) {
     if(k >= num.length) return "0";
 
-    let stack = [], removed = 0
-    for(let char of num){
-        while(removed < k && stack.length && stack[stack.length - 1] >  parseInt(char)){
+    // 1. push each number in a mon. inc order ( if not, remove the top )
+    const stack = [];
+    let counter = 0, i=0;
+    while(counter < k && i < num.length){
+        while(counter < k && stack.length && stack[stack.length-1] > parseInt(num[i])){
             stack.pop()
-            removed++;
+            counter++;
         }
-
-        stack.push(parseInt(char))
+        
+        stack.push(parseInt(num[i++]))
     }
 
+    // 2. push remaining elements as it is
+    while(i < num.length){
+        stack.push(parseInt(num[i++]));
+    }
+
+    while(counter < k){
+        stack.pop()
+        counter++;
+    }
+
+    // 3. create a string from stack 
     let result = ""
-
-    while(stack.length && removed < k){
-        let digit = stack.pop()
-        removed++;
-    }
-
     while(stack.length){
-        let digit = stack.pop()
-        result=`${digit}${result}`
+        result = `${stack.pop()}${result}`
     }
 
-    result = result.replace(/^0+/,'');
+    // 4. remove leading zeros
+    result = result.replace(/^0+/,"");
 
-    return result ? result : "0";
+    return result.length ? result : "0";
 };
