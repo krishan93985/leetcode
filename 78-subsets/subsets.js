@@ -3,21 +3,24 @@
  * @return {number[][]}
  */
 var subsets = function(nums) {
-    const output = [];
-    generateSubsets(nums, 0, [], output);
-    return output;
-};
+   const output = []
 
-var generateSubsets = function(nums, idx, curr, output){
-    if(idx >= nums.length){
-        // console.log(curr)
-        output.push([...curr]);
+   const subsetRec = (index, subset) => {
+    if(index === nums.length){
+        output.push([...subset])
         return;
     }
 
-    curr.push(nums[idx]);
-    generateSubsets(nums, idx+1, curr, output);
+    //pick element
+    subset.push(nums[index]);
+    subsetRec(index+1, subset);
 
-    curr.splice(curr.length-1);
-    generateSubsets(nums, idx+1, curr, output);
-}
+    //do not pick element
+    subset.pop()
+    subsetRec(index+1, subset);
+   }
+   
+   subsetRec(0, []);
+
+   return output;
+};
