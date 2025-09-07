@@ -52,37 +52,3 @@ var orangesRotting = function(grid) {
 
     return minute;
 };
-
-var markRotten = function(grid, [i,j], queue, visited, time){
-    if(i+1 < grid.length && grid[i+1][j] === 1 && visited[i+1][j] !== 2){
-        visited[i+1][j] = 2;
-        queue.push({
-            orange:[i+1,j],
-            time:time+1
-        })
-    }
-
-    if(j+1 < grid[i].length && grid[i][j+1] === 1 && visited[i][j+1] !== 2){
-        visited[i][j+1] = 2;
-        queue.push({
-            orange:[i,j+1],
-            time:time+1
-        })
-    }
-
-    if(i-1 >= 0 && grid[i-1][j] === 1 && visited[i-1][j] !== 2){
-        visited[i-1][j] = 2;
-        queue.push({
-            orange:[i-1,j],
-            time:time+1
-        })
-    }
-
-    if(j-1 >= 0 && grid[i][j-1] === 1 && visited[i][j-1] !== 2){
-        visited[i][j-1] = 2;
-        queue.push({
-            orange:[i,j-1],
-            time:time+1
-        })
-    }
-}
