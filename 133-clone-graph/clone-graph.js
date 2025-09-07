@@ -13,25 +13,26 @@
 var cloneGraph = function(node) {
     if (!node) return null;
 
-    const visited = new Map();
-    const queue = [node];
+    const visited = new Map()
 
-    // create the clone for the root
-    visited.set(node.val, new _Node(node.val));
+    const cloneGraphHelper = (currNode) => {
+        if(!currNode) return null;
 
-    while (queue.length) {
-       let oldNode = queue.shift();
-       let newNode = visited.get(oldNode.val)
+        let root = new _Node(currNode.val);
+        visited.set(currNode.val, root);
 
-       for(let n of oldNode.neighbors){
-        if(!visited.has(n.val)){
-            visited.set(n.val,new _Node(n.val))
-            queue.push(n);
+        for(let n of currNode.neighbors){ 
+            if(!visited.has(n.val)){
+                visited.set(n.val, cloneGraphHelper(n));
+            }
+
+            root.neighbors.push(visited.get(n.val))
         }
 
-        newNode.neighbors.push(visited.get(n.val))
-       }
+        return root;
     }
+
+    visited.set(node.val, cloneGraphHelper(node))
 
     return visited.get(node.val);
 };
