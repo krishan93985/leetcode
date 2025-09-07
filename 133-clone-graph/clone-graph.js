@@ -23,7 +23,7 @@ var cloneGraph = function(node) {
 
         for(let n of currNode.neighbors){ 
             if(!visited.has(n.val)){
-                visited.set(n.val, cloneGraphHelper(n));
+                cloneGraphHelper(n)
             }
 
             root.neighbors.push(visited.get(n.val))
