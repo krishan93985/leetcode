@@ -3,52 +3,50 @@
  * @return {number}
  */
 var orangesRotting = function(grid) {
-    let minute = 0;
-    const queue = [], visited = [], n = grid.length, m = grid[0].length;
+    const visited = [], queue = []
+    let minutes = 0;
 
-    for(let i=0; i<n; i++){
+    for(let i=0; i<grid.length; i++){
         visited.push([])
-        for(let j=0; j<m; j++){
+        for(let j=0; j<grid[i].length; j++){
             if(grid[i][j] === 2){
                 queue.push({
-                    orange:[i,j],
-                    time:0
+                    cell:{i,j},
+                    minute:0
                 })
-                visited[i][j] = 2
-            } else {
-                visited[i][j] = 0;
+                visited[i].push(true);
+            } 
+            else {
+                visited[i].push(false)
             }
         }
     }
-
-    const drow = [-1,0,1,0];
-    const dcol = [0,1,0,-1]
 
     while(queue.length){
-        let {orange:[row,col], time} = queue.shift();
+        let {cell, minute} = queue.shift();
+        let neighbors = [[0,1],[0,-1],[1,0],[-1,0]];
 
-        minute = Math.max(minute, time);
-        for(let i=0; i<4; i++){
-            let nrow = row + drow[i];
-            let ncol = col + dcol[i];
-
-            if(nrow >= 0 && ncol >= 0 && nrow < n && ncol < m && visited[nrow][ncol] !== 2 && grid[nrow][ncol] === 1){
+        minutes = Math.max(minute, minutes)
+        for(let i=0; i<neighbors.length; i++){
+            let x = cell.i + neighbors[i][0], y = cell.j + neighbors[i][1];
+            if(x >=0 && y >=0 && x < grid.length && y < grid[0].length && !visited[x][y] && grid[x][y] === 1){
+                visited[x][y] = true;
                 queue.push({
-                    orange:[nrow,ncol],
-                    time:time+1
+                    cell:{i:x,j:y},
+                    minute: minute+1
                 })
-                visited[nrow][ncol] = 2;
+                grid[x][y] = 2;
             }
         }
     }
 
-    for(let i=0; i<n; i++){
-        for(let j=0; j<m; j++){
-            if(grid[i][j] === 1 && visited[i][j] !== 2){
+    for(let i=0; i<grid.length; i++){
+        for(let j=0; j<grid[i].length; j++){
+            if(grid[i][j] === 1){
                 return -1;
             }
         }
     }
 
-    return minute;
+    return minutes;
 };
