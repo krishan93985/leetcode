@@ -6,7 +6,8 @@ var pacificAtlantic = function(heights) {
     let rows = heights.length, cols = heights[0].length
     const visitedP = Array.from({ length:rows }, () => new Array(cols).fill(0))
     const visitedA = Array.from({ length:rows }, () => new Array(cols).fill(0))
-
+    let row = [0,0,1,-1], col = [1,-1,0,0]
+    
     function sweepFromOcean(i, j, visited, prevHeight){
         // dead end
         if(i < 0 || j < 0 || i >= rows || j >= cols || visited[i][j] === 1 || heights[i][j] < prevHeight) return;
@@ -15,7 +16,6 @@ var pacificAtlantic = function(heights) {
         visited[i][j] = 1;
 
         //sweep in all 4 directions
-        let row = [0,0,1,-1], col = [1,-1,0,0]
         for(let n=0; n < 4; n++){
             let newI = i+row[n], newJ = j+col[n]
             sweepFromOcean(newI, newJ, visited, heights[i][j])
