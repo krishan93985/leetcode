@@ -22,7 +22,7 @@ public:
             int currW = top.second.second;
             int stops = top.first;
 
-            if(stops > k) continue;
+            // if(stops > k) continue;
 
             for(auto node: cities[u]){
                 int v = node.first, w = node.second;
